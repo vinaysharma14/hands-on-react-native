@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import { Button } from '../../components';
 
@@ -17,7 +17,16 @@ export const Home = () => {
 
   const submitPressHandler = useCallback(() => {
     resetTask();
-    setTasks([...tasks, task]);
+
+    if (task !== '') {
+      setTasks([
+        ...tasks,
+        {
+          value: task,
+          id: new Date().getTime(),
+        },
+      ]);
+    }
   }, [task, tasks, resetTask]);
 
   return (
@@ -44,6 +53,12 @@ export const Home = () => {
           onPress={submitPressHandler}
         />
       </View>
+
+      {tasks.map(({ id, value }) => (
+        <View key={id} style={styles.taskItem}>
+          <Text>{value}</Text>
+        </View>
+      ))}
     </View>
   );
 };
@@ -59,6 +74,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   buttonContainer: {
+    marginBottom: 20,
     flexDirection: 'row',
   },
   input: {
@@ -80,5 +96,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
+  },
+  taskItem: {
+    padding: 20,
+    elevation: 5,
+    borderRadius: 5,
+    marginBottom: 20,
+    backgroundColor: 'white',
   },
 });
