@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput } from 'react-native';
+
+import { Button } from '../../components';
 
 export const Home = () => {
   const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
 
   const resetTask = useCallback(() => {
     setTask('');
@@ -14,36 +17,33 @@ export const Home = () => {
 
   const submitPressHandler = useCallback(() => {
     resetTask();
-    console.log('task captured', task);
-  }, [task, resetTask]);
+    setTasks([...tasks, task]);
+  }, [task, tasks, resetTask]);
 
   return (
     <View style={styles.container}>
       <TextInput
         value={task}
         style={styles.input}
+        placeholderTextColor={'grey'}
         onChangeText={textChangeHandler}
+        placeholder={'Add your task here'}
       />
 
-      <Pressable
-        onPress={submitPressHandler}
-        style={({ pressed }) => [
-          styles.button,
-          ...(pressed ? [styles.buttonPressed] : []),
-        ]}
-      >
-        <Text style={styles.buttonText}>Submit</Text>
-      </Pressable>
+      <View style={styles.buttonContainer}>
+        <Button
+          isSecondary
+          title="Reset"
+          onPress={resetTask}
+          style={[styles.flex1, styles.resetButton]}
+        />
 
-      <Pressable
-        onPress={resetTask}
-        style={({ pressed }) => [
-          styles.button,
-          ...(pressed ? [styles.buttonPressed] : []),
-        ]}
-      >
-        <Text style={styles.buttonText}>Reset</Text>
-      </Pressable>
+        <Button
+          title="Submit"
+          style={styles.flex1}
+          onPress={submitPressHandler}
+        />
+      </View>
     </View>
   );
 };
@@ -51,6 +51,15 @@ export const Home = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  flex1: {
+    flex: 1,
+  },
+  resetButton: {
+    marginRight: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
   },
   input: {
     elevation: 5,
