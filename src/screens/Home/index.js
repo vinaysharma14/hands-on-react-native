@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 
 import { Button } from '../../components';
 
@@ -54,18 +54,21 @@ export const Home = () => {
         />
       </View>
 
-      {tasks.map(({ id, value }) => (
-        <View key={id} style={styles.taskItem}>
-          <Text>{value}</Text>
-        </View>
-      ))}
+      <ScrollView contentContainerStyle={styles.listContainer}>
+        {tasks.map(({ id, value }) => (
+          <View key={id} style={styles.taskItem}>
+            <Text>{value}</Text>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    paddingTop: 20,
   },
   flex1: {
     flex: 1,
@@ -75,14 +78,19 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginBottom: 20,
+    marginHorizontal: 20,
     flexDirection: 'row',
   },
   input: {
     elevation: 5,
     color: 'black',
     borderRadius: 5,
+    marginHorizontal: 20,
     paddingHorizontal: 20,
     backgroundColor: 'white',
+  },
+  listContainer: {
+    paddingHorizontal: 20,
   },
   button: {
     padding: 15,
