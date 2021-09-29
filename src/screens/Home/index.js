@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, FlatList, TextInput, StyleSheet } from 'react-native';
 
+import { TaskItem } from './components';
 import { Button } from '../../components';
 
 export const Home = () => {
@@ -29,6 +30,13 @@ export const Home = () => {
     }
   }, [task, tasks, resetTask]);
 
+  const keyExtractorHandler = useCallback(({ id }) => id, []);
+
+  const renderItemHandler = useCallback(
+    ({ item }) => <TaskItem item={item} />,
+    [],
+  );
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -54,13 +62,12 @@ export const Home = () => {
         />
       </View>
 
-      <ScrollView contentContainerStyle={styles.listContainer}>
-        {tasks.map(({ id, value }) => (
-          <View key={id} style={styles.taskItem}>
-            <Text>{value}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={tasks}
+        style={styles.listContainer}
+        renderItem={renderItemHandler}
+        keyExtractor={keyExtractorHandler}
+      />
     </View>
   );
 };
@@ -104,12 +111,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
-  },
-  taskItem: {
-    padding: 20,
-    elevation: 5,
-    borderRadius: 5,
-    marginBottom: 20,
-    backgroundColor: 'white',
   },
 });
